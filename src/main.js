@@ -67,7 +67,7 @@ addTodoForm.addEventListener("submit", (e) => {
   const todoDate = e.target["todo-date"].value;
   if (!todoName || !todoDate) return;
 
-  const createdAt = new Date(todoDate); // Use the date provided by the user
+  const createdAt = new Date(todoDate); //date
   addTodo(todoName, createdAt);
 
   addTodoDialog.close();
