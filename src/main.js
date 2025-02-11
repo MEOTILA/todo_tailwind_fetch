@@ -11,12 +11,14 @@ const deleteTodoBtn = document.querySelector("#delete-todo-btn");
 const editTodoForm = document.querySelector("#edit-todo-form");
 const deleteAllBtn = document.querySelector("#delete-all-btn");
 const sortByDateBtn = document.querySelector("#sort-by-date-btn");
+const deleteSelectedBtn = document.querySelector("#delete-selected-btn");
 
 deleteAllBtn.addEventListener("click", deleteAllTodos);
 sortByDateBtn.addEventListener("click", () => {
   sortTodosByDate();
   alert("Todos sorted by date successfully!");
 });
+deleteSelectedBtn.addEventListener("click", deleteSelectedTodos);
 
 async function deleteAllTodos() {
   const confirmDelete = confirm("Are you sure you want to delete all todos?");
@@ -195,4 +197,34 @@ function saveTodos(todos) {
 function sortTodosByDate() {
   todos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   renderTodo(todos);
+}
+
+function deleteSelectedTodos() {
+  const selectedTodos = Array.from(
+    document.querySelectorAll("#todo-list input[type='checkbox']:checked")
+  ).map((checkbox) => +checkbox.id);
+
+  const todosToDelete = todos.filter((todo) =>
+    selectedTodos.includes(todo.todoID)
+  );
+
+  if (todosToDelete.length > 0) {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete the selected todos?"
+    );
+    if (!confirmDelete) return;
+
+    todos = todos.filter((todo) => !selectedTodos.includes(todo.todoID));
+    saveTodos(todos);
+    renderTodo(todos);
+    alert("Selected todos deleted successfully!");
+  } else {
+    alert("No todos selected.");
+  }
+
+  if (todos.length > 0) {
+    todoList.previousElementSibling.classList.add("hidden");
+  } else {
+    todoList.previousElementSibling.classList.remove("hidden");
+  }
 }
